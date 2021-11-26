@@ -32,12 +32,15 @@ export class UsersController {
   }
 
   @Put(':id')
-  updateUser(@Body() updateUserDto: UpdateUserDto, @Param('id') id: string) {
+  updateUser(
+    @Body() updateUserDto: UpdateUserDto,
+    @Param('id') id: string,
+  ): Promise<User> {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Delete()
-  deleteUser(): string {
-    return 'delete user';
+  @Delete(':id')
+  deleteUser(@Param('id') id: string) {
+    return this.usersService.delete(id);
   }
 }
