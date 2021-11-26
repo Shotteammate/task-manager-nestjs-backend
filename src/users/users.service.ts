@@ -25,6 +25,7 @@ export class UsersService {
   }
 
   async update(id: string, payload: UpdateUserDto): Promise<User> {
-    return await this.userModel.findOneAndUpdate({ _id: id }, payload);
+    const options = { new: true };
+    return await this.userModel.findOneAndUpdate({ _id: id }, payload, options);
   }
 }
