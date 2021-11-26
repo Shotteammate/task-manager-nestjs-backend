@@ -8,6 +8,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
 
@@ -30,9 +31,9 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @Put()
-  updateUser(): string {
-    return 'update user';
+  @Put(':id')
+  updateUser(@Body() updateUserDto: UpdateUserDto, @Param('id') id: string) {
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Delete()
