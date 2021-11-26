@@ -1,7 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { PASSWORD_MIN_LENGTH_ERR_MSG } from 'src/common/constants/errorMessages';
-import { PASSWORD_LENGTH } from '../constants';
 
 export type UserDocument = User & Document;
 
@@ -30,7 +28,6 @@ export class User {
     type: String,
     required: true,
     trim: true,
-    minlength: [PASSWORD_LENGTH, PASSWORD_MIN_LENGTH_ERR_MSG],
   })
   password: string;
 }
