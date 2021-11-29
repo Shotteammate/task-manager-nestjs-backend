@@ -11,7 +11,7 @@ import {
   PASSWORD_MIN_LENGTH_ERR_MSG,
   PASSWORD_REGEX_ERR_MSG,
 } from 'src/common/constants/errorMessages';
-import { PASSWORD_LENGTH } from '../constants';
+import { PASSWORD_MIN_LENGTH } from '../constants';
 
 // regex match all excludes specific word
 // https://regexland.com/regex-match-all-except/
@@ -31,7 +31,7 @@ export class CreateUserDto {
   readonly email: string;
 
   @IsNotEmpty()
-  @MinLength(PASSWORD_LENGTH, {
+  @MinLength(PASSWORD_MIN_LENGTH, {
     message: PASSWORD_MIN_LENGTH_ERR_MSG,
   })
   @Matches(excludePasswordRegex, {
