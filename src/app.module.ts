@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017', {
       dbName: 'task-manager-nestjs-api',
+      autoIndex: true,
     }),
     UsersModule,
   ],
