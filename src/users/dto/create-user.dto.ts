@@ -7,7 +7,10 @@ import {
   Matches,
   IsOptional,
 } from 'class-validator';
-import { PASSWORD_MIN_LENGTH_ERR_MSG } from 'src/common/constants/errorMessages';
+import {
+  PASSWORD_MIN_LENGTH_ERR_MSG,
+  PASSWORD_REGEX_ERR_MSG,
+} from 'src/common/constants/errorMessages';
 import { PASSWORD_LENGTH } from '../constants';
 
 // regex match all excludes specific word
@@ -31,6 +34,8 @@ export class CreateUserDto {
   @MinLength(PASSWORD_LENGTH, {
     message: PASSWORD_MIN_LENGTH_ERR_MSG,
   })
-  @Matches(excludePasswordRegex)
+  @Matches(excludePasswordRegex, {
+    message: PASSWORD_REGEX_ERR_MSG,
+  })
   readonly password: string;
 }
