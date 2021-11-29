@@ -59,8 +59,14 @@ $ npm run test:cov
 ```
 
 ## Features
-- Users API: Create, Read, Update and Delete (CRUD)
-- User API Validation
+- Password Hashing
+- Users API
+  - CRUD
+  - Validation
+    - email: check unique email in DB
+    - password: forbid containing "password" (case-insensitive) in user password
+    - age: must be non-negative number
+- Collection Documents timestamps
 ## Stay in touch
 
 - Author - [Dickson Pun](https://xxxx-sample.com)
