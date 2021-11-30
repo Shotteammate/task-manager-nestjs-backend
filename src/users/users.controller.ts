@@ -6,9 +6,11 @@ import {
   Delete,
   Body,
   Param,
+  UseFilters,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { MongoExceptionFilter } from '../common/exceptionFilters/mongoException.filter';
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
 
@@ -26,7 +28,10 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  // catching MongoDB errors
+  // ref: https://stackoverflow.com/questions/50864001/how-to-handle-mongoose-error-with-nestjs
   @Post()
+  @UseFilters(MongoExceptionFilter)
   createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
   }

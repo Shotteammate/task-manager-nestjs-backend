@@ -59,7 +59,8 @@ $ npm run test:cov
 ```
 
 ## Features
-- Password Hashing
+- Security
+  - Password Hashing in pre save middleware
 - Users API
   - CRUD
   - Validation
