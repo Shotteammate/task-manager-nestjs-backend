@@ -18,7 +18,7 @@ import * as bcrypt from 'bcryptjs';
         name: User.name,
         useFactory: () => {
           const schema = UserSchema;
-
+          // middleware
           schema.pre('save', async function () {
             if (this.isModified('password')) {
               this['password'] = await bcrypt.hash(this['password'], 8);
@@ -32,5 +32,6 @@ import * as bcrypt from 'bcryptjs';
   ],
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}

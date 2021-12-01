@@ -60,7 +60,9 @@ $ npm run test:cov
 
 ## Features
 - Security
-  - Password Hashing in pre save middleware
+  - Password hashing in pre save middleware
+  - Login credentials checking
+  - Password masking for login route response 
 - Users API
   - CRUD
   - Validation
