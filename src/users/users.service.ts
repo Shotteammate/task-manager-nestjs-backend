@@ -5,6 +5,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DeleteOne } from './interface/mongooseDeleteOne.interface';
 import { User, UserDocument } from './schemas/user.schema';
+import * as bcrypt from 'bcryptjs';
+import { UserCredentialsResponse } from './interface/userCredentialsResponse.interface';
 
 @Injectable()
 export class UsersService {
@@ -25,8 +27,38 @@ export class UsersService {
     return await this.userModel.findOne({ _id: id });
   }
 
-  async findOneByEmail(email: string): Promise<User> {
-    return await this.userModel.findOne({ email });
+  async findOneByCredentails(
+    email: string,
+    password: string,
+  ): Promise<UserCredentialsResponse> {
+    const user = await this.userModel.findOne({ email });
+
+    if (user) {
+      const isValidPassword = await this.isPasswordMatch(
+        password,
+        user.password,
+      );
+
+      if (isValidPassword) {
+        return {
+          user: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            age: user.age,
+          },
+        };
+      }
+    }
+    return null;
+  }
+
+  async isPasswordMatch(
+    incomingPassword: string,
+    hash: string,
+  ): Promise<boolean> {
+    const result = await bcrypt.compare(incomingPassword, hash);
+    return result;
   }
 
   async update(id: string, payload: UpdateUserDto): Promise<User> {
