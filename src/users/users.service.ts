@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { DeleteOne } from './interface/mongooseDeleteOne.interface';
+import { MongoDeleteOne } from './interface/mongooseDeleteOne.interface';
 import { User, UserDocument } from './schemas/user.schema';
 import * as bcrypt from 'bcryptjs';
 import { UserCredentialsResponse } from './interface/userCredentialsResponse.interface';
@@ -25,6 +25,17 @@ export class UsersService {
 
   async findOne(id: string): Promise<User> {
     return await this.userModel.findOne({ _id: id });
+  }
+
+  async update(id: string, payload: UpdateUserDto): Promise<User> {
+    const options = { new: true };
+    return await this.userModel.findOneAndUpdate({ _id: id }, payload, options);
+  }
+
+  // typescrip interface 'MongoDeleteOne' is used to prevent 'Promise<Object>' situation
+  // which cause 'typescript Don't use `Object` as a type.'
+  async delete(id: string): Promise<MongoDeleteOne> {
+    return await this.userModel.deleteOne({ _id: id });
   }
 
   async findOneByCredentails(
@@ -61,14 +72,5 @@ export class UsersService {
     return result;
   }
 
-  async update(id: string, payload: UpdateUserDto): Promise<User> {
-    const options = { new: true };
-    return await this.userModel.findOneAndUpdate({ _id: id }, payload, options);
-  }
-
-  // typescrip interface 'DeleteOne' is used to prevent 'Promise<Object>' situation
-  // which cause 'typescript Don't use `Object` as a type.'
-  async delete(id: string): Promise<DeleteOne> {
-    return await this.userModel.deleteOne({ _id: id });
-  }
+  //TODO: generateAuthToken
 }

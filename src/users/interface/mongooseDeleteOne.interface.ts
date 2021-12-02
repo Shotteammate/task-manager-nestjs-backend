@@ -1,3 +1,3 @@
-export interface DeleteOne {
+export interface MongoDeleteOne {
   readonly deletedCount: number;
 }

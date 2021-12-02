@@ -13,7 +13,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { MongoExceptionFilter } from '../common/exceptionFilters/mongoException.filter';
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
-import { DeleteOne } from './interface/mongooseDeleteOne.interface';
+import { MongoDeleteOne } from './interface/mongooseDeleteOne.interface';
 
 @Controller('users')
 export class UsersController {
@@ -46,7 +46,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  deleteUser(@Param('id') id: string): Promise<DeleteOne> {
+  deleteUser(@Param('id') id: string): Promise<MongoDeleteOne> {
     return this.usersService.delete(id);
   }
 }
