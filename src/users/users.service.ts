@@ -23,11 +23,11 @@ export class UsersService {
     return await this.userModel.find({});
   }
 
-  async findOne(id: string): Promise<User> {
+  async findOne(id: string): Promise<User | undefined> {
     return await this.userModel.findOne({ _id: id });
   }
 
-  async update(id: string, payload: UpdateUserDto): Promise<User> {
+  async update(id: string, payload: UpdateUserDto): Promise<User | undefined> {
     const options = { new: true };
     return await this.userModel.findOneAndUpdate({ _id: id }, payload, options);
   }
@@ -52,12 +52,10 @@ export class UsersService {
 
       if (isValidPassword) {
         return {
-          user: {
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            age: user.age,
-          },
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          age: user.age,
         };
       }
     }
@@ -71,6 +69,4 @@ export class UsersService {
     const result = await bcrypt.compare(incomingPassword, hash);
     return result;
   }
-
-  //TODO: generateAuthToken
 }
