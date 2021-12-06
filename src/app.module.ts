@@ -4,13 +4,19 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017', {
-      // TODO: use .env later
-      dbName: 'task-manager-nestjs-api',
-      autoIndex: true,
+    ConfigModule.forRoot({}),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+        dbName: configService.get<string>('DATABASE_NAME'),
+        autoIndex: true,
+      }),
+      inject: [ConfigService],
     }),
     UsersModule,
     AuthModule,
