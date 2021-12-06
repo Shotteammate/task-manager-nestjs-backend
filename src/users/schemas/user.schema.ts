@@ -32,6 +32,11 @@ export class User {
     trim: true,
   })
   password: string;
+
+  @Prop({
+    type: String,
+  })
+  currentHashedRefreshToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

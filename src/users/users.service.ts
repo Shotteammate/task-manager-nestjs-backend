@@ -69,4 +69,10 @@ export class UsersService {
     const result = await bcrypt.compare(incomingPassword, hash);
     return result;
   }
+
+  async setCurrentRefreshToken(refreshToken: string, id: string) {
+    const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+
+    return await this.update(id, { currentHashedRefreshToken });
+  }
 }

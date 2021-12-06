@@ -3,22 +3,31 @@ import { AppService } from './app.service';
 import { LocalAuthGuard } from './auth/guard/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
-import { AccessToken } from './interface/accessToken.interface';
+import { UsersService } from './users/users.service';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly appService: AppService,
     private authService: AuthService,
+    private usersService: UsersService,
   ) {}
 
   @UseGuards(LocalAuthGuard)
-  // @UseGuards(JwtAuthGuard)
   @Post('auth/login')
-  async login(@Request() req): Promise<AccessToken> {
+  async login(@Request() req): Promise<any> {
     // The req parameter will contain a user property (populated by Passport during the passport-local authentication flow)
     // https://docs.nestjs.com/security/authentication#jwt-functionality
-    return this.authService.login(req.user);
+    const { user } = req;
+    const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(
+      user._id,
+    );
+    const { cookie: refreshTokenCookie, token: refreshToken } =
+      this.authService.getCookieWithJwtRefreshToken(user._id);
+
+    await this.usersService.setCurrentRefreshToken(refreshToken, user._id);
+    req.res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
+    return user;
   }
 
   @UseGuards(JwtAuthGuard)

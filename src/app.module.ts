@@ -13,8 +13,11 @@ import * as Joi from 'joi';
       validationSchema: Joi.object({
         MONGODB_URI: Joi.string().required(),
         DATABASE_NAME: Joi.string(),
-        JWT_ACCESS_TOKEN_SECRET_KEY: Joi.string().required(),
         PORT: Joi.number().default(5000),
+        JWT_ACCESS_TOKEN_SECRET_KEY: Joi.string().required(),
+        JWT_REFRESH_TOKEN_SECRET_KEY: Joi.string().required(),
+        JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required(),
+        JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
       }),
     }),
     MongooseModule.forRootAsync({

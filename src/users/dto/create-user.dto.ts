@@ -38,4 +38,7 @@ export class CreateUserDto {
     message: PASSWORD_REGEX_ERR_MSG,
   })
   readonly password: string;
+
+  @IsOptional()
+  readonly currentHashedRefreshToken: string;
 }
