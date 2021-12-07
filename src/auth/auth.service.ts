@@ -22,7 +22,9 @@ export class AuthService {
   getCookieWithJwtAccessToken(id: number) {
     const payload = { id };
     const token = this.jwtService.sign(payload, {
-      secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
+      secret: `${this.configService.get<string>(
+        'JWT_ACCESS_TOKEN_SECRET_KEY',
+      )}`,
       expiresIn: `${this.configService.get<string>(
         'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
       )}`,
@@ -35,7 +37,9 @@ export class AuthService {
   getCookieWithJwtRefreshToken(id: number) {
     const payload = { id };
     const token = this.jwtService.sign(payload, {
-      secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET_KEY'),
+      secret: `${this.configService.get<string>(
+        'JWT_REFRESH_TOKEN_SECRET_KEY',
+      )}`,
       expiresIn: `${this.configService.get<string>(
         'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
       )}`,

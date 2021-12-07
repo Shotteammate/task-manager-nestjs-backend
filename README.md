@@ -60,9 +60,13 @@ $ npm run test:cov
 
 ## Features
 - Security
+  - Authentication
+    - Login credentials checking
+    - create JWT access token and refresh token
+    - hash refresh token for data storage
   - Password hashing in pre save middleware
-  - Login credentials checking
   - Password masking for login route response 
+  - Use environment variable and Joi schema validation
 - Users API
   - CRUD
   - Validation
@@ -71,10 +75,12 @@ $ npm run test:cov
     - age: must be non-negative number
 - Collection Documents timestamps
 ## Stay in touch
-
 - Author - [Dickson Pun](https://xxxx-sample.com)
-<!-- - Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework) -->
+
+
+## Learning material
+- Implementing refresh tokens using JWT
+  https://wanago.io/2020/09/21/api-nestjs-refresh-tokens-jwt/
 
 ## License
 

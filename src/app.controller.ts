@@ -4,6 +4,7 @@ import { LocalAuthGuard } from './auth/guard/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
 import { UsersService } from './users/users.service';
+import { JwtRefreshGuard } from './auth/guard/jwt-refresh-token-auth.guard';
 
 @Controller()
 export class AppController {
@@ -33,6 +34,17 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
+    return req.user;
+  }
+
+  @UseGuards(JwtRefreshGuard)
+  @Get('auth/refresh')
+  refresh(@Request() req) {
+    const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(
+      req.user._id,
+    );
+
+    req.res.setHeader('Set-Cookie', accessTokenCookie);
     return req.user;
   }
 }
