@@ -7,6 +7,8 @@ import {
   Body,
   Param,
   UseFilters,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -20,11 +22,13 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Get(':id')
+  @HttpCode(HttpStatus.OK)
   findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(id);
   }
@@ -33,11 +37,13 @@ export class UsersController {
   // ref: https://stackoverflow.com/questions/50864001/how-to-handle-mongoose-error-with-nestjs
   @Post()
   @UseFilters(MongoExceptionFilter)
+  @HttpCode(HttpStatus.CREATED)
   createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
   }
 
   @Put(':id')
+  @HttpCode(HttpStatus.OK)
   updateUser(
     @Body() updateUserDto: UpdateUserDto,
     @Param('id') id: string,
@@ -46,6 +52,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.OK)
   deleteUser(@Param('id') id: string): Promise<MongoDeleteOne> {
     return this.usersService.delete(id);
   }
