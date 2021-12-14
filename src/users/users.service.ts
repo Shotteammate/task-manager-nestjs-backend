@@ -76,6 +76,10 @@ export class UsersService {
     return await this.update(id, { currentHashedRefreshToken });
   }
 
+  async removeRefreshToken(id: string) {
+    return await this.update(id, { currentHashedRefreshToken: null });
+  }
+
   async getUserIfRefreshTokenMatches(refreshToken: string, id: string) {
     const user = await this.findOne(id);
 

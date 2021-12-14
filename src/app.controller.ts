@@ -50,4 +50,13 @@ export class AppController {
     const accessToken = this.authService.generateJwtAccessToken(req.user._id);
     return { accessToken };
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('auth/logout')
+  @HttpCode(HttpStatus.OK)
+  async logout(@Request() req) {
+    const { user } = req;
+    await this.usersService.removeRefreshToken(user.id);
+    return user.id;
+  }
 }
