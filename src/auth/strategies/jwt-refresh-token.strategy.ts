@@ -15,11 +15,6 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     private readonly userService: UsersService,
   ) {
     super({
-      // jwtFromRequest: ExtractJwt.fromExtractors([
-      //   (req: Request) => {
-      //     return req?.cookies?.Refresh;
-      //   },
-      // ]),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: configService.get<string>('JWT_REFRESH_TOKEN_SECRET_KEY'),
       ignoreExpiration: false,
@@ -28,7 +23,6 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
   }
 
   validate(req: Request, payload) {
-    // const refreshToken = req.cookies?.Refresh;
     const refreshToken = req.get('authorization').replace('Bearer', '').trim();
 
     if (!refreshToken) {

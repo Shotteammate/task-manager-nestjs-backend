@@ -29,15 +29,11 @@ export class AppController {
     // The req parameter will contain a user property (populated by Passport during the passport-local authentication flow)
     // https://docs.nestjs.com/security/authentication#jwt-functionality
     const { user } = req;
-    const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(
-      user._id,
-    );
-    const { cookie: refreshTokenCookie, token: refreshToken } =
-      this.authService.getCookieWithJwtRefreshToken(user._id);
+    const accessToken = this.authService.generateJwtAccessToken(user._id);
+    const refreshToken = this.authService.generateJwtRefreshToken(user._id);
 
     await this.usersService.setCurrentRefreshToken(refreshToken, user._id);
-    req.res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
-    return user;
+    return { user, accessToken, refreshToken };
   }
 
   @UseGuards(JwtAuthGuard)
@@ -51,11 +47,7 @@ export class AppController {
   @Get('auth/refresh')
   @HttpCode(HttpStatus.OK)
   refresh(@Request() req) {
-    const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(
-      req.user._id,
-    );
-
-    req.res.setHeader('Set-Cookie', accessTokenCookie);
-    return req.user;
+    const accessToken = this.authService.generateJwtAccessToken(req.user._id);
+    return { accessToken };
   }
 }

@@ -19,7 +19,7 @@ export class AuthService {
     return await this.usersService.findOneByCredentails(email, password);
   }
 
-  getCookieWithJwtAccessToken(id: number) {
+  generateJwtAccessToken(id: number) {
     const payload = { id };
     const token = this.jwtService.sign(payload, {
       secret: `${this.configService.get<string>(
@@ -29,12 +29,10 @@ export class AuthService {
         'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
       )}`,
     });
-    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
-    )}`;
+    return token;
   }
 
-  getCookieWithJwtRefreshToken(id: number) {
+  generateJwtRefreshToken(id: number) {
     const payload = { id };
     const token = this.jwtService.sign(payload, {
       secret: `${this.configService.get<string>(
@@ -44,12 +42,7 @@ export class AuthService {
         'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
       )}`,
     });
-    const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
-    )}`;
-    return {
-      cookie,
-      token,
-    };
+
+    return token;
   }
 }
