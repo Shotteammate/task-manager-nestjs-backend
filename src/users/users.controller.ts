@@ -21,11 +21,12 @@ import { MongoDeleteOne } from './interface/mongooseDeleteOne.interface';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get()
-  @HttpCode(HttpStatus.OK)
-  findAll(): Promise<User[]> {
-    return this.usersService.findAll();
-  }
+  // TODO: need admin role -> roleGuard
+  // @Get()
+  // @HttpCode(HttpStatus.OK)
+  // findAll(): Promise<User[]> {
+  //   return this.usersService.findAll();
+  // }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
