@@ -24,12 +24,14 @@ import { TasksService } from './tasks.service';
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
+  // TODO: can only be accessed by admin role
   @Get()
   @HttpCode(HttpStatus.OK)
   findAll(): Promise<Task[]> {
     return this.tasksService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   findOne(@Param('id') id: string): Promise<Task> {
@@ -38,11 +40,11 @@ export class TasksController {
 
   // catching MongoDB errors
   // ref: https://stackoverflow.com/questions/50864001/how-to-handle-mongoose-error-with-nestjs
-  @Post()
-  @UseFilters(MongoExceptionFilter) //TODO: add error handling for owner true
   @UseGuards(JwtAuthGuard)
+  @UseFilters(MongoExceptionFilter) //TODO: add error handling for owner true
+  @Post()
   @HttpCode(HttpStatus.CREATED)
-  createUser(
+  createTask(
     @Body() createTaskData: CreateTaskDto,
     @Request() req,
   ): Promise<Task> {
@@ -50,18 +52,20 @@ export class TasksController {
     return this.tasksService.create(createTaskData, user);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  updateUser(
+  updateTask(
     @Body() updateTaskData: UpdateTaskDto,
     @Param('id') id: string,
   ): Promise<Task> {
     return this.tasksService.update(id, updateTaskData);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  deleteUser(@Param('id') id: string): Promise<MongoDeleteOne> {
+  deleteTask(@Param('id') id: string): Promise<MongoDeleteOne> {
     return this.tasksService.delete(id);
   }
 }

@@ -9,6 +9,7 @@ import {
   UseFilters,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -16,7 +17,7 @@ import { MongoExceptionFilter } from '../common/exceptionFilters/mongoException.
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
 import { MongoDeleteOne } from './interface/mongooseDeleteOne.interface';
-import { UserCredentialsResponse } from './interface/userCredentialsResponse.interface';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -29,6 +30,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   findOne(@Param('id') id: string): Promise<User> {
@@ -37,13 +39,14 @@ export class UsersController {
 
   // catching MongoDB errors
   // ref: https://stackoverflow.com/questions/50864001/how-to-handle-mongoose-error-with-nestjs
-  @Post()
   @UseFilters(MongoExceptionFilter)
+  @Post()
   @HttpCode(HttpStatus.CREATED)
   createUser(@Body() createUserData: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserData);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   updateUser(
@@ -53,6 +56,7 @@ export class UsersController {
     return this.usersService.update(id, updateUserData);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   deleteUser(@Param('id') id: string): Promise<MongoDeleteOne> {

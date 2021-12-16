@@ -31,7 +31,9 @@ export class TasksService {
 
   async update(id: string, payload: UpdateTaskDto): Promise<Task | undefined> {
     const options = { new: true };
-    return await this.taskModel.findOneAndUpdate({ _id: id }, payload, options);
+    return await this.taskModel
+      .findOneAndUpdate({ _id: id }, payload, options)
+      .populate('owner');
   }
 
   // typescrip interface 'MongoDeleteOne' is used to prevent 'Promise<Object>' situation

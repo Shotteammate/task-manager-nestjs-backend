@@ -73,7 +73,14 @@ $ npm run test:cov
     - email: check unique email in DB
     - password: forbid containing "password" (case-insensitive) in user password
     - age: must be non-negative number
-- Collection Documents timestamps
+  - Virtual property populate
+- Tasks API
+  - CRUD
+  - Validation
+  - populate
+- Database
+  - Create relationship between User and Task schema
+  - Collection Documents timestamps
 ## Stay in touch
 - Author - [Dickson Pun](https://xxxx-sample.com)
 
