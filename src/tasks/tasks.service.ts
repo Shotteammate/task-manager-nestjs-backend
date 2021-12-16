@@ -18,7 +18,7 @@ export class TasksService {
   }
 
   async findOne(id: string): Promise<Task | undefined> {
-    return await this.taskModel.findOne({ _id: id });
+    return await this.taskModel.findOne({ _id: id }).populate('owner');
   }
 
   async create(createTaskData: CreateTaskDto, owner: User): Promise<Task> {

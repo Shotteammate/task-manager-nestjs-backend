@@ -17,7 +17,7 @@ export class Task {
   @Prop({ type: Boolean, default: false })
   completed: boolean;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, required: true, ref: User.name })
+  @Prop({ type: MongooseSchema.Types.ObjectId, required: true, ref: 'User' })
   owner: User;
 }
 
