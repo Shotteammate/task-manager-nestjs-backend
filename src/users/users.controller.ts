@@ -31,7 +31,7 @@ export class UsersController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  findOne(@Param('id') id: string): Promise<UserCredentialsResponse> {
+  findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(id);
   }
 

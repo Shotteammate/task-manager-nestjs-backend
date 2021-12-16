@@ -1,10 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Task } from 'src/tasks/schemas/tasks.schema';
 
 export type UserDocument = User & Document;
 
 @Schema({
   timestamps: true,
+  toJSON: {
+    virtuals: true,
+  },
 })
 export class User {
   @Prop({
@@ -37,6 +41,16 @@ export class User {
     type: String,
   })
   currentHashedRefreshToken: string;
+
+  tasks: Task[]; // virtual property
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.virtual('tasks', {
+  ref: 'Task',
+  localField: '_id',
+  foreignField: 'owner',
+});
+
+export { UserSchema };
