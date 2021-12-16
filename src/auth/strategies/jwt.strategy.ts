@@ -19,7 +19,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   // validate() method, and attach it as a property on the Request object.
   // https://docs.nestjs.com/security/authentication#jwt-functionality
   async validate(payload: any): Promise<User> {
-    const user = await this.userService.findOneWithCredentials(payload.id);
+    // TODO: validate access token is the right one?
+    const user = await this.userService.findOne(payload.id);
 
     if (!user) {
       throw new NotFoundException();

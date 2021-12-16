@@ -33,10 +33,6 @@ export class UsersService {
     return user;
   }
 
-  async findOneWithCredentials(id: string): Promise<User | undefined> {
-    return await this.userModel.findOne({ _id: id });
-  }
-
   async update(id: string, payload: UpdateUserDto): Promise<User | undefined> {
     const options = { new: true };
     return await this.userModel.findOneAndUpdate({ _id: id }, payload, options);
@@ -91,7 +87,7 @@ export class UsersService {
   }
 
   async getUserIfRefreshTokenMatches(refreshToken: string, id: string) {
-    const user = await this.findOneWithCredentials(id);
+    const user = await this.findOne(id);
 
     const isRefreshTokenMatching = await bcrypt.compare(
       refreshToken,
