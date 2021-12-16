@@ -9,7 +9,10 @@ import {
   Body,
   Put,
   Delete,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { MongoExceptionFilter } from 'src/common/exceptionFilters/mongoException.filter';
 import { MongoDeleteOne } from 'src/users/interface/mongooseDeleteOne.interface';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -36,19 +39,24 @@ export class TasksController {
   // catching MongoDB errors
   // ref: https://stackoverflow.com/questions/50864001/how-to-handle-mongoose-error-with-nestjs
   @Post()
-  @UseFilters(MongoExceptionFilter)
+  @UseFilters(MongoExceptionFilter) //TODO: add error handling for owner true
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.CREATED)
-  createUser(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
-    return this.tasksService.create(createTaskDto);
+  createUser(
+    @Body() createTaskData: CreateTaskDto,
+    @Request() req,
+  ): Promise<Task> {
+    const { user } = req; // user comes from JwtAuthGuard
+    return this.tasksService.create(createTaskData, user);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   updateUser(
-    @Body() updateTaskDto: UpdateTaskDto,
+    @Body() updateTaskData: UpdateTaskDto,
     @Param('id') id: string,
   ): Promise<Task> {
-    return this.tasksService.update(id, updateTaskDto);
+    return this.tasksService.update(id, updateTaskData);
   }
 
   @Delete(':id')

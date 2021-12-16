@@ -14,8 +14,8 @@ export class UsersService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const createdUser = new this.userModel(createUserDto);
+  async create(createUserData: CreateUserDto): Promise<User> {
+    const createdUser = new this.userModel(createUserData);
     return createdUser.save();
   }
 
@@ -23,7 +23,18 @@ export class UsersService {
     return await this.userModel.find({});
   }
 
-  async findOne(id: string): Promise<User | undefined> {
+  async findOne(id: string): Promise<UserCredentialsResponse | undefined> {
+    const user = await this.userModel.findOne({ _id: id });
+
+    return {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      age: user.age,
+    };
+  }
+
+  async findOneWithCredentials(id: string): Promise<User | undefined> {
     return await this.userModel.findOne({ _id: id });
   }
 
@@ -66,8 +77,8 @@ export class UsersService {
     incomingPassword: string,
     hash: string,
   ): Promise<boolean> {
-    const result = await bcrypt.compare(incomingPassword, hash);
-    return result;
+    const isMatch = await bcrypt.compare(incomingPassword, hash);
+    return isMatch;
   }
 
   async setCurrentRefreshToken(refreshToken: string, id: string) {
@@ -81,7 +92,7 @@ export class UsersService {
   }
 
   async getUserIfRefreshTokenMatches(refreshToken: string, id: string) {
-    const user = await this.findOne(id);
+    const user = await this.findOneWithCredentials(id);
 
     const isRefreshTokenMatching = await bcrypt.compare(
       refreshToken,

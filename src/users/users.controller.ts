@@ -16,21 +16,22 @@ import { MongoExceptionFilter } from '../common/exceptionFilters/mongoException.
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
 import { MongoDeleteOne } from './interface/mongooseDeleteOne.interface';
+import { UserCredentialsResponse } from './interface/userCredentialsResponse.interface';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   // TODO: need admin role -> roleGuard
-  // @Get()
-  // @HttpCode(HttpStatus.OK)
-  // findAll(): Promise<User[]> {
-  //   return this.usersService.findAll();
-  // }
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  findAll(): Promise<User[]> {
+    return this.usersService.findAll();
+  }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  findOne(@Param('id') id: string): Promise<User> {
+  findOne(@Param('id') id: string): Promise<UserCredentialsResponse> {
     return this.usersService.findOne(id);
   }
 
@@ -39,17 +40,17 @@ export class UsersController {
   @Post()
   @UseFilters(MongoExceptionFilter)
   @HttpCode(HttpStatus.CREATED)
-  createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.create(createUserDto);
+  createUser(@Body() createUserData: CreateUserDto): Promise<User> {
+    return this.usersService.create(createUserData);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   updateUser(
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() updateUserData: UpdateUserDto,
     @Param('id') id: string,
   ): Promise<User> {
-    return this.usersService.update(id, updateUserDto);
+    return this.usersService.update(id, updateUserData);
   }
 
   @Delete(':id')

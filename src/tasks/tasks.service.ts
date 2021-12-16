@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { MongoDeleteOne } from 'src/users/interface/mongooseDeleteOne.interface';
+import { User } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class TasksService {
@@ -20,8 +21,11 @@ export class TasksService {
     return await this.taskModel.findOne({ _id: id });
   }
 
-  async create(createTaskDto: CreateTaskDto): Promise<Task> {
-    const createdTask = new this.taskModel(createTaskDto);
+  async create(createTaskData: CreateTaskDto, owner: User): Promise<Task> {
+    const createdTask = new this.taskModel({
+      ...createTaskData,
+      owner,
+    });
     return createdTask.save();
   }
 
