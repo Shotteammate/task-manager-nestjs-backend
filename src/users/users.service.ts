@@ -7,11 +7,13 @@ import { MongoDeleteOne } from './interface/mongooseDeleteOne.interface';
 import { User, UserDocument } from './schemas/user.schema';
 import * as bcrypt from 'bcryptjs';
 import { UserCredentialsResponse } from './interface/userCredentialsResponse.interface';
+import { TasksService } from 'src/tasks/tasks.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    private tasksService: TasksService,
   ) {}
 
   async create(createUserData: CreateUserDto): Promise<User> {
@@ -41,6 +43,8 @@ export class UsersService {
   // typescrip interface 'MongoDeleteOne' is used to prevent 'Promise<Object>' situation
   // which cause 'typescript Don't use `Object` as a type.'
   async delete(id: string): Promise<MongoDeleteOne> {
+    const user = await this.userModel.findOne({ _id: id }).populate('tasks');
+    await this.tasksService.deleteAll(user._id);
     return await this.userModel.deleteOne({ _id: id });
   }
 

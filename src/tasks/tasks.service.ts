@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Task, TaskDocument } from './schemas/tasks.schema';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { MongoDeleteOne } from 'src/users/interface/mongooseDeleteOne.interface';
@@ -40,5 +40,9 @@ export class TasksService {
   // which cause 'typescript Don't use `Object` as a type.'
   async delete(id: string): Promise<MongoDeleteOne> {
     return await this.taskModel.deleteOne({ _id: id });
+  }
+
+  async deleteAll(id: ObjectId): Promise<MongoDeleteOne> {
+    return await this.taskModel.deleteMany({ owner: id });
   }
 }

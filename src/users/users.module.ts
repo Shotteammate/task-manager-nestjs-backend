@@ -4,6 +4,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { User, UserSchema } from './schemas/user.schema';
 import * as bcrypt from 'bcryptjs';
+import { TasksModule } from 'src/tasks/tasks.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import * as bcrypt from 'bcryptjs';
       },
     ]),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    TasksModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],
