@@ -16,7 +16,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { MongoExceptionFilter } from '../common/exceptionFilters/mongoException.filter';
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
-import { MongoDeleteOne } from './interface/mongooseDeleteOne.interface';
+import { MongoDeleteResponse } from './interface/mongooseDeleteResponse.interface';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 
 @Controller('users')
@@ -59,7 +59,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  deleteUser(@Param('id') id: string): Promise<MongoDeleteOne> {
+  deleteUser(@Param('id') id: string): Promise<MongoDeleteResponse> {
     return this.usersService.delete(id);
   }
 }

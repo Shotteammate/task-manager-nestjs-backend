@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { MongoDeleteOne } from './interface/mongooseDeleteOne.interface';
+import { MongoDeleteResponse } from './interface/mongooseDeleteResponse.interface';
 import { User, UserDocument } from './schemas/user.schema';
 import * as bcrypt from 'bcryptjs';
 import { UserCredentialsResponse } from './interface/userCredentialsResponse.interface';
@@ -40,9 +40,9 @@ export class UsersService {
     return await this.userModel.findOneAndUpdate({ _id: id }, payload, options);
   }
 
-  // typescrip interface 'MongoDeleteOne' is used to prevent 'Promise<Object>' situation
+  // typescrip interface 'MongoDeleteResponse' is used to prevent 'Promise<Object>' situation
   // which cause 'typescript Don't use `Object` as a type.'
-  async delete(id: string): Promise<MongoDeleteOne> {
+  async delete(id: string): Promise<MongoDeleteResponse> {
     const user = await this.userModel.findOne({ _id: id }).populate('tasks');
     await this.tasksService.deleteAll(user._id);
     return await this.userModel.deleteOne({ _id: id });

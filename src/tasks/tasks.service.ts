@@ -4,7 +4,7 @@ import { Task, TaskDocument } from './schemas/tasks.schema';
 import { Model, ObjectId } from 'mongoose';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { MongoDeleteOne } from 'src/users/interface/mongooseDeleteOne.interface';
+import { MongoDeleteResponse } from 'src/users/interface/mongooseDeleteResponse.interface';
 import { User } from 'src/users/schemas/user.schema';
 
 @Injectable()
@@ -36,13 +36,13 @@ export class TasksService {
       .populate('owner');
   }
 
-  // typescrip interface 'MongoDeleteOne' is used to prevent 'Promise<Object>' situation
+  // typescrip interface 'MongoDeleteResponse' is used to prevent 'Promise<Object>' situation
   // which cause 'typescript Don't use `Object` as a type.'
-  async delete(id: string): Promise<MongoDeleteOne> {
+  async delete(id: string): Promise<MongoDeleteResponse> {
     return await this.taskModel.deleteOne({ _id: id });
   }
 
-  async deleteAll(id: ObjectId): Promise<MongoDeleteOne> {
+  async deleteAll(id: ObjectId): Promise<MongoDeleteResponse> {
     return await this.taskModel.deleteMany({ owner: id });
   }
 }

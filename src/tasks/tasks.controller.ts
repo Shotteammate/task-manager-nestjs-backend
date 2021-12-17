@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { MongoExceptionFilter } from 'src/common/exceptionFilters/mongoException.filter';
-import { MongoDeleteOne } from 'src/users/interface/mongooseDeleteOne.interface';
+import { MongoDeleteResponse } from 'src/users/interface/mongooseDeleteResponse.interface';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './schemas/tasks.schema';
@@ -65,7 +65,7 @@ export class TasksController {
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  deleteTask(@Param('id') id: string): Promise<MongoDeleteOne> {
+  deleteTask(@Param('id') id: string): Promise<MongoDeleteResponse> {
     return this.tasksService.delete(id);
   }
 }
